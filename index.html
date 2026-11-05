@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HABITA PRO · Demo Hotelera</title>
+<style>
+:root {
+  --bg: #f5f6f8;
+  --ink: #17212d;
+  --muted: #798391;
+  --line: #e7e9ee;
+  --primary: #2b6cb0;
+  --primary-hover: #2c5282;
+  --dark: #172331;
+  --green: #15966b;
+  --orange: #dd6b20;
+  --red: #e53e3e;
+  --purple: #805ad5;
+  --blue: #3182ce;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px system-ui, -apple-system, Segoe UI, sans-serif; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+aside { position: fixed; inset: 0 auto 0 0; width: 238px; background: var(--dark); color: #fff; padding: 24px 15px; overflow-y: auto; z-index: 20; }
+.brand { font-size: 22px; font-weight: 850; padding: 0 12px 25px; letter-spacing: -0.5px; }
+.brand span { color: #63b3ed; }
+.nav { display: flex; align-items: center; width: 100%; padding: 11px 13px; margin: 3px 0; background: transparent; border: 0; border-radius: 10px; color: #afbdca; text-align: left; font-weight: 550; transition: all 0.15s ease; }
+.nav:hover, .nav.active { background: #2a3c50; color: #fff; }
+.nav i { display: inline-block; width: 24px; font-style: normal; font-size: 15px; }
+.sidefoot { margin: 30px 10px 10px; color: #8999a9; font-size: 12px; line-height: 1.4; border-top: 1px solid #2a3c50; padding-top: 15px; }
+main { margin-left: 238px; padding: 25px 30px; max-width: 1750px; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 25px; }
+.top h1 { margin: 0; font-size: 25px; font-weight: 800; }
+.muted { color: var(--muted); }
+.pill { background: #e6fffa; color: #234e52; border: 1px solid #b2f5ea; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+.pill.dot::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #319795; }
+.cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; margin-bottom: 20px; }
+.card, .panel { background: white; border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+.card .num { font-size: 28px; font-weight: 800; margin: 10px 0 4px; color: var(--ink); }
+.panel { margin-bottom: 18px; }
+.panel h3 { margin: 0 0 16px; font-size: 16px; font-weight: 750; color: var(--ink); }
+.grid2 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; }
+.btn { border: 0; background: var(--primary); color: white; padding: 10px 14px; border-radius: 9px; font-weight: 650; display: inline-flex; align-items: center; gap: 6px; justify-content: center; transition: background 0.15s ease; }
+.btn:hover { background: var(--primary-hover); }
+.btn.secondary { background: #eef0f4; color: #253344; }
+.btn.secondary:hover { background: #e2e6ed; }
+.btn.dark { background: var(--dark); }
+.btn.danger { background: #fed7d7; color: #9b2c2c; }
+.btn.danger:hover { background: #feb2b2; }
+.btn.sm { padding: 6px 10px; font-size: 12px; border-radius: 6px; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; white-space: nowrap; }
+th, td { padding: 13px 12px; text-align: left; border-bottom: 1px solid var(--line); }
+th { font-size: 12px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.tag { display: inline-block; border-radius: 20px; padding: 4px 10px; font-size: 11px; font-weight: 750; background: #edf0f4; color: #536071; }
+.tag.green { background: #e6fffa; color: #234e52; border: 1px solid #b2f5ea; }
+.tag.orange { background: #feebc8; color: #7b341e; border: 1px solid #fbd38d; }
+.tag.red { background: #fff5f5; color: #9b2c2c; border: 1px solid #feb2b2; }
+.tag.blue { background: #ebf8ff; color: #2c5282; border: 1px solid #bee3f8; }
+.tag.purple { background: #faf5ff; color: #553c9a; border: 1px solid #e9d8fd; }
+
+.rooms { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.roombox { border: 1px solid #dfe4ea; border-radius: 14px; padding: 16px; background: #f8fafb; text-align: left; min-height: 120px; cursor: pointer; transition: transform 0.1s ease, box-shadow 0.1s ease; display: flex; flex-col; justify-content: space-between; }
+.roombox:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.roombox.disponible { border-color: #b2f5ea; background: #f0fdf4; }
+.roombox.ocupada { border-color: #feb2b2; background: #fff5f5; }
+.roombox.limpieza { border-color: #feebc8; background: #fffaf0; }
+.roombox.mantenimiento { border-color: #e9d8fd; background: #faf5ff; }
+.roombox b { font-size: 18px; color: var(--ink); display: block; }
+.roombox small { display: block; margin-top: 6px; color: #657181; font-weight: 500; }
+.roombox .guest-info { font-size: 12px; font-weight: 600; color: #2d3748; margin-top: 8px; border-top: 1px stroke #e2e8f0; padding-top: 6px; }
+
+.products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.product { border: 1px solid var(--line); border-radius: 12px; padding: 15px; background: white; text-align: left; cursor: pointer; transition: border-color 0.15s ease; }
+.product:hover { border-color: var(--primary); }
+.product strong { display: block; margin: 6px 0 4px; font-size: 15px; }
+.price { color: var(--primary); font-weight: 800; font-size: 15px; }
+
+.formrow { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+input, select, textarea { border: 1px solid #dce1e8; border-radius: 9px; padding: 10px 12px; background: #fff; min-width: 0; outline: none; transition: border 0.15s; }
+input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+input { flex: 1; }
+
+.chart { height: 190px; display: flex; align-items: flex-end; gap: 14px; border-bottom: 1px solid var(--line); padding: 12px 0 4px; }
+.chart .barcol { flex: 1; background: linear-gradient(to top, var(--primary), #63b3ed); border-radius: 7px 7px 0 0; min-height: 5px; position: relative; transition: height 0.3s ease; }
+.barcol small { position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); color: var(--muted); font-weight: 600; font-size: 11px; }
+.barcol .val { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 700; color: var(--ink); }
+
+.hidden { display: none !important; }
+.toast { position: fixed; right: 25px; bottom: 25px; background: #172331; color: white; padding: 13px 20px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; z-index: 100; font-weight: 600; border-left: 4px solid var(--primary); }
+.split { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; }
+.statline { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.statline:last-child { border-bottom: 0; }
+.menuToggle { display: none; }
+.empty { padding: 30px; text-align: center; color: var(--muted); font-weight: 500; }
+
+@media (max-width: 1100px) {
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .grid2, .split { grid-template-columns: 1fr; }
+  .rooms { grid-template-columns: repeat(3, 1fr); }
+  .products { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  aside { position: fixed; width: 100%; max-height: 60px; overflow: hidden; transition: max-height 0.25s ease; padding: 14px 18px; }
+  aside.open { max-height: 100vh; }
+  .brand { padding: 0 0 15px; }
+  .menuToggle { display: block; float: right; background: #2a3c50; border: 0; color: #fff; padding: 6px 12px; border-radius: 7px; font-weight: 600; }
+  main { margin-left: 0; margin-top: 60px; padding: 18px; }
+  .top { align-items: flex-start; flex-direction: column; }
+  .top h1 { font-size: 21px; }
+  .rooms { grid-template-columns: repeat(2, 1fr); }
+  .cards { gap: 10px; }
+  .card { padding: 14px; }
+  .card .num { font-size: 24px; }
+  .products { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <button class="menuToggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰ Menú</button>
+  <div class="brand">HABITA<span>PRO</span> <small style="font-size:10px;color:#90cdf4;display:block;font-weight:600">HOTEL SUITES & SPA</small></div>
+  <div id="nav"></div>
+  <div class="sidefoot">● Grand Palace Hotel<br>Demo interactiva · Sin backend</div>
+</aside>
+
+<main>
+  <div class="top">
+    <div>
+      <h1 id="title">Dashboard</h1>
+      <div class="muted">Grand Palace Hotel & Spa · Gestión integral hotelera</div>
+    </div>
+    <span class="pill dot">Hotel Operativo</span>
+  </div>
+  <div id="view"></div>
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const money = n => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n);
+const today = () => new Date().toISOString().slice(0, 10);
+const uid = () => Math.random().toString(36).slice(2, 9);
+
+// Datos Semilla Iniciales
+const seedCategories = [
+  { id: 1, name: 'Single Standard', price: 42000, capacity: 1, desc: 'Cama individual, TV 43", Wi-Fi alta velocidad' },
+  { id: 2, name: 'Doble Executive', price: 68000, capacity: 2, desc: 'Cama King Size, escritorio work-friendly, vista a la ciudad' },
+  { id: 3, name: 'Matrimonial Deluxe', price: 85000, capacity: 2, desc: 'Cama Super King, balcón privado, Jacuzzi y frigobar' },
+  { id: 4, name: 'Suite Presidencial', price: 150000, capacity: 4, desc: '2 Ambientes, terraza exclusiva, sala de estar y room service 24h' }
+];
+
+const seedServices = [
+  { id: 101, name: 'Desayuno Buffet Extra', category: 'Gastronomía', price: 8500 },
+  { id: 102, name: 'Acceso Spa & Sauna (x Día)', category: 'Relax', price: 14000 },
+  { id: 103, name: 'Estacionamiento Cubierto (Día)', category: 'Servicios', price: 7500 },
+  { id: 104, name: 'Vino Malbec Reserva (Minibar)', category: 'Minibar', price: 18500 },
+  { id: 105, name: 'Agua Mineral Con/Sin Gas', category: 'Minibar', price: 2500 },
+  { id: 106, name: 'Late Check-Out (hasta 18hs)', category: 'Servicios', price: 25000 },
+  { id: 107, name: 'Masaje Descontracturante (50 min)', category: 'Relax', price: 28000 },
+  { id: 108, name: 'Cena Gourmet Room Service', category: 'Gastronomía', price: 22000 }
+];
+
+const seedRooms = [
+  { id: 101, categoryId: 1, floor: 1, status: 'ocupada', guest: 'Carlos Mendoza', checkout: today() },
+  { id: 102, categoryId: 1, floor: 1, status: 'disponible', guest: '', checkout: '' },
+  { id: 103, categoryId: 2, floor: 1, status: 'ocupada', guest: 'Lucía Fernández', checkout: '2026-11-08' },
+  { id: 104, categoryId: 2, floor: 1, status: 'limpieza', guest: '', checkout: '' },
+  { id: 201, categoryId: 2, floor: 2, status: 'disponible', guest: '', checkout: '' },
+  { id: 202, categoryId: 3, floor: 2, status: 'ocupada', guest: 'Roberto Gómez', checkout: '2026-11-07' },
+  { id: 203, categoryId: 3, floor: 2, status: 'mantenimiento', guest: '', checkout: '' },
+  { id: 204, categoryId: 4, floor: 2, status: 'ocupada', guest: 'Sofía & Martín Valenzuela', checkout: '2026-11-10' }
+];
+
+const seedReservations = [
+  { id: 'RES-8901', guest: 'Mariana Costa', roomType: 'Doble Executive', checkin: today(), nights: 3, pax: 2, status: 'Confirmada', paid: true, total: 204000 },
+  { id: 'RES-8902', guest: 'Alejandro Rossi', roomType: 'Suite Presidencial', checkin: '2026-11-08', nights: 2, pax: 3, status: 'Confirmada', paid: false, total: 300000 },
+  { id: 'RES-8903', guest: 'Esteban Quito', roomType: 'Single Standard', checkin: '2026-11-09', nights: 1, pax: 1, status: 'Pendiente', paid: false, total: 42000 }
+];
+
+const seedStaff = [
+  { id: 1, name: 'Valeria Ríos', role: 'Recepción', shift: 'Mañana' },
+  { id: 2, name: 'Gonzalo Silva', role: 'Recepción', shift: 'Noche' },
+  { id: 3, name: 'Beatriz Morales', role: 'Governante / Limpieza', shift: 'Mañana' },
+  { id: 4, name: 'Jorge Benítez', role: 'Mantenimiento', shift: 'Tarde' }
+];
+
+const seedExpenses = [
+  { id: 'e1', concept: 'Lavandería industrial e Insumos', amount: 145000, date: today() },
+  { id: 'e2', concept: 'Reposición Minibar y Bebidas', amount: 82000, date: today() },
+  { id: 'e3', concept: 'Mantenimiento Climatización Central', amount: 65000, date: today() }
+];
+
+const seedFolios = [
+  { id: 'f101', roomId: 101, items: [{ name: 'Vino Malbec Reserva', amount: 18500 }, { name: 'Desayuno Extra', amount: 8500 }] },
+  { id: 'f103', roomId: 103, items: [{ name: 'Acceso Spa & Sauna', amount: 14000 }] },
+  { id: 'f204', roomId: 204, items: [{ name: 'Masaje Descontracturante', amount: 28000 }, { name: 'Cena Gourmet Room Service', amount: 22000 }] }
+];
+
+const seedSales = [
+  { id: 'v1', concept: 'Check-out Hab 105', total: 136000, date: today(), method: 'Tarjeta de Crédito' },
+  { id: 'v2', concept: 'Reserva Anticipada RES-8901', total: 204000, date: today(), method: 'Transferencia' }
+];
+
+const initial = {
+  categories: seedCategories,
+  services: seedServices,
+  rooms: seedRooms,
+  reservations: seedReservations,
+  staff: seedStaff,
+  expenses: seedExpenses,
+  folios: seedFolios,
+  sales: seedSales
+};
+
+let state;
+try {
+  state = JSON.parse(localStorage.getItem('habitapro_demo')) || structuredClone(initial);
+} catch {
+  state = structuredClone(initial);
+}
+
+let page = 'Dashboard';
+let chosenRoomForService = 101;
+
+const save = () => localStorage.setItem('habitapro_demo', JSON.stringify(state));
+const $ = id => document.getElementById(id);
+const toast = msg => {
+  const e = $('toast');
+  e.textContent = msg;
+  e.style.display = 'block';
+  setTimeout(() => e.style.display = 'none', 2800);
+};
+
+const pillTag = status => {
+  const map = {
+    'disponible': ['green', '🟢 Disponible'],
+    'ocupada': ['red', '🔴 Ocupada'],
+    'limpieza': ['orange', '🧹 Limpieza'],
+    'mantenimiento': ['purple', '🔧 Mantenimiento'],
+    'Confirmada': ['green', 'Confirmada'],
+    'Pendiente': ['orange', 'Pendiente'],
+    'Completada': ['blue', 'Completada'],
+    'Cancelada': ['red', 'Cancelada']
+  };
+  const [cls, txt] = map[status] || ['blue', status];
+  return `<span class="tag ${cls}">${txt}</span>`;
+};
+
+const panel = (title, content) => `<div class="panel"><h3>${title}</h3>${content}</div>`;
+const table = (headers, rows) => `<div class="tablewrap"><table><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('') || `<tr><td colspan="${headers.length}" class="empty">Sin registros cargados</td></tr>`}</tbody></table></div>`;
+const row = (...cells) => `<tr>${cells.map(c => `<td>${c}</td>`).join('')}</tr>`;
+
+const sections = [
+  ['▦', 'Dashboard'],
+  ['▤', 'Mapa de Habitaciones'],
+  ['◉', 'Recepcion / Check-in'],
+  ['♨', 'Housekeeping / Limpieza'],
+  ['▣', 'Reservas'],
+  ['☰', 'Tipos y Tarifas'],
+  ['▥', 'Servicios y Minibar'],
+  ['♧', 'Personal'],
+  ['◈', 'Caja y Gastos'],
+  ['▥', 'Reportes'],
+  ['⚙', 'Configuración']
+];
+
+function navigate(p) {
+  page = p;
+  render();
+  $('sidebar').classList.remove('open');
+}
+
+function render() {
+  $('nav').innerHTML = sections.map(([ic, n]) => `<button class="nav ${page === n ? 'active' : ''}" onclick="navigate('${n}')"><i>${ic}</i>${n}</button>`).join('');
+  $('title').textContent = page;
+  
+  let html = '';
+  switch (page) {
+    case 'Dashboard': html = dashboard(); break;
+    case 'Mapa de Habitaciones': html = mapaHabitaciones(); break;
+    case 'Recepcion / Check-in': html = checkin(); break;
+    case 'Housekeeping / Limpieza': html = housekeeping(); break;
+    case 'Reservas': html = reservas(); break;
+    case 'Tipos y Tarifas': html = tarifas(); break;
+    case 'Servicios y Minibar': html = servicios(); break;
+    case 'Personal': html = personal(); break;
+    case 'Caja y Gastos': html = caja(); break;
+    case 'Reportes': html = reportes(); break;
+    case 'Configuración': html = configuracion(); break;
+  }
+  $('view').innerHTML = html;
+}
+
+// 1. DASHBOARD
+function dashboard() {
+  const totalR = state.rooms.length;
+  const occupied = state.rooms.filter(r => r.status === 'ocupada').length;
+  const free = state.rooms.filter(r => r.status === 'disponible').length;
+  const occRate = Math.round((occupied / (totalR || 1)) * 100);
+  const revenue = state.sales.reduce((a, b) => a + b.total, 0);
+
+  return `
+    <div class="cards">
+      <div class="card"><div class="muted">Ocupación General</div><div class="num">${occRate}%</div><small class="muted">${occupied} de ${totalR} habitaciones</small></div>
+      <div class="card"><div class="muted">Habitaciones Libres</div><div class="num">${free}</div><small class="muted">Listas para Check-in</small></div>
+      <div class="card"><div class="muted">Ingresos Registrados</div><div class="num">${money(revenue)}</div><small class="muted">Movimientos de hoy</small></div>
+      <div class="card"><div class="muted">Reservas Futuras</div><div class="num">${state.reservations.length}</div><small class="muted">Próximos arribos</small></div>
+    </div>
+    
+    <div class="grid2">
+      ${panel('Ocupación semanal (%)', `
+        <div class="chart">
+          ${[65, 70, 85, 90, 95, 100, 80].map((v, i) => `
+            <div class="barcol" style="height:${v}%">
+              <span class="val">${v}%</span>
+              <small>${['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'][i]}</small>
+            </div>
+          `).join('')}
+        </div>
+        <p class="muted" style="margin-top:28px;font-size:12px">Métrica de ocupación proyectada según reservas y estancia promedio.</p>
+      `)}
+      
+      ${panel('Acciones Rápida & Estado', `
+        <div class="actions">
+          <button class="btn" onclick="navigate('Recepcion / Check-in')">+ Registrar Check-In</button>
+          <button class="btn secondary" onclick="navigate('Mapa de Habitaciones')">Ver Habitaciones</button>
+          <button class="btn secondary" onclick="navigate('Servicios y Minibar')">+ Cargar Minibar</button>
+        </div>
+        <div class="statline"><span>Habitaciones en Limpieza</span><b>${state.rooms.filter(r => r.status === 'limpieza').length}</b></div>
+        <div class="statline"><span>En Mantenimiento</span><b>${state.rooms.filter(r => r.status === 'mantenimiento').length}</b></div>
+        <div class="statline"><span>Check-outs del día</span><b>${state.rooms.filter(r => r.checkout === today()).length}</b></div>
+      `)}
+    </div>
+
+    ${panel('Huéspedes Actuales', table(
+      ['Habitación', 'Huésped', 'Tipo', 'Estado', 'Fecha Check-Out', 'Acción'],
+      state.rooms.filter(r => r.status === 'ocupada').map(r => {
+        const cat = state.categories.find(c => c.id === r.categoryId)?.name || 'Estándar';
+        return row(
+          `<b>Habitación ${r.id}</b>`,
+          r.guest || 'Sin registro',
+          cat,
+          pillTag(r.status),
+          r.checkout || 'No especificada',
+          `<button class="btn secondary sm" onclick="checkoutRoom(${r.id})">Realizar Check-Out</button>`
+        );
+      })
+    ))}
+  `;
+}
+
+// 2. MAPA DE HABITACIONES
+function mapaHabitaciones() {
+  return `
+    <div class="actions">
+      <button class="btn" onclick="navigate('Recepcion / Check-in')">+ Nuevo Check-in</button>
+      <button class="btn secondary" onclick="addRoomPrompt()">+ Agregar Habitación</button>
+    </div>
+    ${panel('Plano Visual de Habitaciones · Tocá una habitación para cambiar su estado', `
+      <div class="rooms">
+        ${state.rooms.map(r => {
+          const cat = state.categories.find(c => c.id === r.categoryId)?.name || 'Estándar';
+          return `
+            <div class="roombox ${r.status}" onclick="cycleRoomStatus(${r.id})">
+              <div>
+                <b>Hab. ${r.id} <small style="display:inline;font-weight:normal;color:#718096">(${cat})</small></b>
+                <small>Piso ${r.floor}</small>
+              </div>
+              <div style="margin-top:10px">
+                ${pillTag(r.status)}
+                ${r.guest ? `<div class="guest-info">👤 ${r.guest}<br><small>Out: ${r.checkout}</small></div>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+      <p class="muted" style="margin-top:15px;font-size:12px">El estado rota entre: Disponible ➔ Ocupada ➔ Limpieza ➔ Mantenimiento.</p>
+    `)}
+  `;
+}
+
+function cycleRoomStatus(id) {
+  const room = state.rooms.find(r => r.id === id);
+  const next = {
+    'disponible': 'ocupada',
+    'ocupada': 'limpieza',
+    'limpieza': 'mantenimiento',
+    'mantenimiento': 'disponible'
+  };
+  room.status = next[room.status];
+  if (room.status === 'disponible') {
+    room.guest = '';
+    room.checkout = '';
+  } else if (room.status === 'ocupada' && !room.guest) {
+    room.guest = 'Huésped Pasajero';
+    room.checkout = today();
+  }
+  save();
+  render();
+  toast(`Habitación ${id} cambiada a ${room.status}`);
+}
+
+function addRoomPrompt() {
+  const num = prompt('Número de la nueva habitación (Ej: 301):');
+  if (!num) return;
+  const roomId = parseInt(num);
+  if (isNaN(roomId) || state.rooms.some(r => r.id === roomId)) {
+    return toast('Número de habitación inválido o ya existente');
+  }
+  const floor = Math.floor(roomId / 100) || 1;
+  state.rooms.push({
+    id: roomId,
+    categoryId: state.categories[0].id,
+    floor: floor,
+    status: 'disponible',
+    guest: '',
+    checkout: ''
+  });
+  save();
+  render();
+  toast(`Habitación ${roomId} agregada con éxito`);
+}
+
+// 3. CHECK-IN / RECEPCION
+function checkin() {
+  const freeRooms = state.rooms.filter(r => r.status === 'disponible');
+
+  return `
+    <div class="split">
+      ${panel('Registrar Nuevo Check-In', `
+        ${freeRooms.length === 0 ? '<div class="empty">No hay habitaciones disponibles para asignación directa.</div>' : `
+          <div class="formrow">
+            <input id="guestName" placeholder="Nombre completo del huésped">
+            <input id="guestDoc" placeholder="DNI / Pasaporte">
+          </div>
+          <div class="formrow">
+            <select id="roomSelect">
+              ${freeRooms.map(r => {
+                const cat = state.categories.find(c => c.id === r.categoryId);
+                return `<option value="${r.id}">Hab. ${r.id} - ${cat?.name} (${money(cat?.price)}/noche)</option>`;
+              }).join('')}
+            </select>
+            <input id="stayNights" type="number" min="1" value="1" placeholder="Noches" onchange="calcCheckinTotal()">
+          </div>
+          <div class="formrow">
+            <input id="checkoutDate" type="date" value="${today()}">
+            <select id="payMethod">
+              <option>Tarjeta de Crédito</option>
+              <option>Tarjeta de Débito</option>
+              <option>Efectivo</option>
+              <option>Transferencia</option>
+            </select>
+          </div>
+          <div class="statline" style="margin-top:10px">
+            <b>Total Estancia Estimado</b>
+            <b id="checkinTotalDisplay" style="font-size:18px;color:var(--primary)">${money(state.categories[0]?.price || 0)}</b>
+          </div>
+          <button class="btn" style="width:100%;margin-top:15px" onclick="processCheckin()">Completar Check-In & Asignar Habitación</button>
+        `}
+      `)}
+
+      ${panel('Habitaciones Ocupadas & Check-Out', table(
+        ['Hab.', 'Huésped', 'Out', 'Acción'],
+        state.rooms.filter(r => r.status === 'ocupada').map(r => row(
+          `<b>${r.id}</b>`,
+          r.guest,
+          r.checkout,
+          `<button class="btn danger sm" onclick="checkoutRoom(${r.id})">Check-Out</button>`
+        ))
+      ))}
+    </div>
+  `;
+}
+
+function calcCheckinTotal() {
+  const rId = +$('roomSelect').value;
+  const room = state.rooms.find(r => r.id === rId);
+  const cat = state.categories.find(c => c.id === room?.categoryId);
+  const nights = +$('stayNights').value || 1;
+  const total = (cat?.price || 0) * nights;
+  if ($('checkinTotalDisplay')) $('checkinTotalDisplay').textContent = money(total);
+}
+
+function processCheckin() {
+  const name = $('guestName').value.trim();
+  const roomId = +$('roomSelect').value;
+  const nights = +$('stayNights').value;
+  const date = $('checkoutDate').value;
+  const method = $('payMethod').value;
+
+  if (!name || !roomId || nights < 1) return toast('Por favor complete todos los datos del huésped');
+
+  const room = state.rooms.find(r => r.id === roomId);
+  const cat = state.categories.find(c => c.id === room.categoryId);
+  const total = (cat?.price || 0) * nights;
+
+  room.status = 'ocupada';
+  room.guest = name;
+  room.checkout = date;
+
+  state.sales.push({
+    id: uid(),
+    concept: `Check-in Hab ${room.id} (${name})`,
+    total: total,
+    date: today(),
+    method: method
+  });
+
+  save();
+  render();
+  toast(`Check-In exitoso en Habitación ${roomId}`);
+}
+
+function checkoutRoom(roomId) {
+  const room = state.rooms.find(r => r.id === roomId);
+  if (!confirm(`¿Confirmar Check-Out de habitación ${room.id} (${room.guest})? Pasarás la habitación a estado Limpieza.`)) return;
+
+  room.status = 'limpieza';
+  room.guest = '';
+  room.checkout = '';
+
+  save();
+  render();
+  toast(`Check-out finalizado. Habitación ${roomId} enviada a limpieza.`);
+}
+
+// 4. HOUSEKEEPING
+function housekeeping() {
+  const inCleaning = state.rooms.filter(r => r.status === 'limpieza');
+  const inMaint = state.rooms.filter(r => r.status === 'mantenimiento');
+
+  return `
+    <div class="cards">
+      <div class="card"><div class="muted">Requieren Limpieza</div><div class="num">${inCleaning.length}</div></div>
+      <div class="card"><div class="muted">En Mantenimiento</div><div class="num">${inMaint.length}</div></div>
+      <div class="card"><div class="muted">Listas para Check-in</div><div class="num">${state.rooms.filter(r => r.status === 'disponible').length}</div></div>
+    </div>
+
+    ${panel('Gestión de Limpieza y Preparación de Habitaciones', table(
+      ['Habitación', 'Piso', 'Tipo Categoría', 'Estado Actual', 'Acción de Personal'],
+      state.rooms.filter(r => ['limpieza', 'mantenimiento'].includes(r.status)).map(r => {
+        const cat = state.categories.find(c => c.id === r.categoryId)?.name || 'Estándar';
+        return row(
+          `<b>Habitación ${r.id}</b>`,
+          `Piso ${r.floor}`,
+          cat,
+          pillTag(r.status),
+          `<button class="btn sm" style="background:var(--green)" onclick="setClean(${r.id})">✓ Marcar Limpia y Lista</button>`
+        );
+      })
+    ))}
+  `;
+}
+
+function setClean(roomId) {
+  const room = state.rooms.find(r => r.id === roomId);
+  room.status = 'disponible';
+  save();
+  render();
+  toast(`Habitación ${roomId} lista para la venta`);
+}
+
+// 5. RESERVAS
+function reservas() {
+  return `
+    ${panel('Crear Nueva Reserva', `
+      <div class="formrow">
+        <input id="resGuest" placeholder="Nombre completo huésped">
+        <select id="resCat">
+          ${state.categories.map(c => `<option value="${c.name}">${c.name} (${money(c.price)}/noche)</option>`).join('')}
+        </select>
+        <input id="resDate" type="date" value="${today()}">
+        <input id="resNights" type="number" min="1" value="2" placeholder="Noches">
+        <input id="resPax" type="number" min="1" value="2" placeholder="Huéspedes">
+        <button class="btn" onclick="addReservation()">+ Guardar Reserva</button>
+      </div>
+    `)}
+
+    ${panel('Listado de Reservas Registradas', table(
+      ['Código', 'Huésped', 'Categoría', 'Check-In', 'Noches', 'Pasajeros', 'Importe', 'Estado', 'Acción'],
+      state.reservations.map(r => row(
+        `<b>#${r.id}</b>`,
+        r.guest,
+        r.roomType,
+        r.checkin,
+        `${r.nights} noche(s)`,
+        `${r.pax} pax`,
+        money(r.total),
+        pillTag(r.status),
+        r.status !== 'Cancelada' ? `<button class="btn danger sm" onclick="cancelRes('${r.id}')">Cancelar</button>` : `<span class="muted">-</span>`
+      ))
+    ))}
+  `;
+}
+
+function addReservation() {
+  const guest = $('resGuest').value.trim();
+  const roomType = $('resCat').value;
+  const checkin = $('resDate').value;
+  const nights = +$('resNights').value;
+  const pax = +$('resPax').value;
+
+  if (!guest || !checkin || nights < 1) return toast('Complete los datos obligatorios');
+
+  const cat = state.categories.find(c => c.name === roomType);
+  const total = (cat?.price || 50000) * nights;
+
+  state.reservations.push({
+    id: 'RES-' + Math.floor(1000 + Math.random() * 9000),
+    guest,
+    roomType,
+    checkin,
+    nights,
+    pax,
+    status: 'Confirmada',
+    paid: false,
+    total
+  });
+
+  save();
+  render();
+  toast('Reserva agregada exitosamente');
+}
+
+function cancelRes(id) {
+  const r = state.reservations.find(res => res.id === id);
+  if (r) r.status = 'Cancelada';
+  save();
+  render();
+  toast('Reserva cancelada');
+}
+
+// 6. CATEGORIAS Y TARIFAS
+function tarifas() {
+  return `
+    ${panel('Agregar Nueva Categoría de Habitación', `
+      <div class="formrow">
+        <input id="catName" placeholder="Nombre de categoría (ej: Suite Jacuzzi)">
+        <input id="catPrice" type="number" placeholder="Precio por Noche (ARS)">
+        <input id="catCap" type="number" placeholder="Capacidad Máx (Personas)">
+        <input id="catDesc" placeholder="Descripción breve de amenidades">
+        <button class="btn" onclick="addCategory()">+ Guardar Tipo</button>
+      </div>
+    `)}
+
+    ${panel('Tarifario & Tipos de Habitación', table(
+      ['Categoría', 'Tarifa por Noche', 'Capacidad', 'Comodidades / Equipamiento', 'Acciones'],
+      state.categories.map(c => row(
+        `<b>${c.name}</b>`,
+        money(c.price),
+        `${c.capacity} pers.`,
+        c.desc,
+        `<button class="btn secondary sm" onclick="editCatPrice(${c.id})">Modificar Precio</button> 
+         <button class="btn danger sm" onclick="deleteCategory(${c.id})">Eliminar</button>`
+      ))
+    ))}
+  `;
+}
+
+function addCategory() {
+  const name = $('catName').value.trim();
+  const price = +$('catPrice').value;
+  const capacity = +$('catCap').value;
+  const desc = $('catDesc').value.trim();
+
+  if (!name || price <= 0) return toast('Datos de tarifa inválidos');
+
+  state.categories.push({
+    id: Date.now(),
+    name,
+    price,
+    capacity: capacity || 2,
+    desc: desc || 'Habitación equipada'
+  });
+
+  save();
+  render();
+  toast('Categoría añadida correctamente');
+}
+
+function editCatPrice(id) {
+  const cat = state.categories.find(c => c.id === id);
+  const n = prompt(`Nuevo precio para ${cat.name}:`, cat.price);
+  if (n === null || +n <= 0) return;
+  cat.price = +n;
+  save();
+  render();
+  toast('Precio actualizado');
+}
+
+function deleteCategory(id) {
+  if (!confirm('¿Eliminar esta categoría?')) return;
+  state.categories = state.categories.filter(c => c.id !== id);
+  save();
+  render();
+}
+
+// 7. SERVICIOS Y MINIBAR
+function servicios() {
+  const occupiedRooms = state.rooms.filter(r => r.status === 'ocupada');
+  const currentFolio = state.folios.find(f => f.roomId === chosenRoomForService) || { items: [] };
+  const folioTotal = currentFolio.items.reduce((a, b) => a + b.amount, 0);
+
+  return `
+    <div class="split">
+      ${panel('Consumos & Servicios Extra', `
+        <div class="formrow">
+          <label style="width:100%;font-weight:600">Seleccionar Habitación Ocupada:</label>
+          <select id="serviceRoomSelect" onchange="chosenRoomForService=+this.value; render()">
+            ${occupiedRooms.length ? occupiedRooms.map(r => `<option value="${r.id}" ${chosenRoomForService === r.id ? 'selected' : ''}>Hab. ${r.id} (${r.guest})</option>`).join('') : '<option value="">No hay habitaciones ocupadas</option>'}
+          </select>
+        </div>
+        <div class="products">
+          ${state.services.map(s => `
+            <div class="product" onclick="addServiceToFolio(${s.id})">
+              <small class="muted">${s.category}</small>
+              <strong>${s.name}</strong>
+              <div class="price">${money(s.price)}</div>
+            </div>
+          `).join('')}
+        </div>
+      `)}
+
+      ${panel(`Cuenta de Habitación ${chosenRoomForService}`, `
+        <div id="folioDetails">
+          ${currentFolio.items.length ? currentFolio.items.map((it, idx) => `
+            <div class="statline">
+              <span>${it.name}</span>
+              <b>${money(it.amount)} <button class="btn danger sm" onclick="removeFolioItem(${idx})">×</button></b>
+            </div>
+          `).join('') : '<div class="empty">Sin consumos cargados a esta habitación</div>'}
+          <div class="statline" style="margin-top:15px">
+            <b>Total Minibar & Servicios Extra</b>
+            <b style="font-size:18px;color:var(--primary)">${money(folioTotal)}</b>
+          </div>
+        </div>
+      `)}
+    </div>
+  `;
+}
+
+function addServiceToFolio(serviceId) {
+  if (!chosenRoomForService) return toast('Seleccione una habitación ocupada');
+  const srv = state.services.find(s => s.id === serviceId);
+  let folio = state.folios.find(f => f.roomId === chosenRoomForService);
+  
+  if (!folio) {
+    folio = { id: 'f' + chosenRoomForService, roomId: chosenRoomForService, items: [] };
+    state.folios.push(folio);
+  }
+  
+  folio.items.push({ name: srv.name, amount: srv.price });
+  save();
+  render();
+  toast(`Cargado ${srv.name} a Habitación ${chosenRoomForService}`);
+}
+
+function removeFolioItem(idx) {
+  let folio = state.folios.find(f => f.roomId === chosenRoomForService);
+  if (folio) {
+    folio.items.splice(idx, 1);
+    save();
+    render();
+  }
+}
+
+// 8. PERSONAL
+function personal() {
+  return `
+    ${panel('Registrar Empleado', `
+      <div class="formrow">
+        <input id="stName" placeholder="Nombre completo">
+        <select id="stRole">
+          <option>Recepción</option>
+          <option>Governante / Limpieza</option>
+          <option>Mantenimiento</option>
+          <option>Gerencia / Admin</option>
+        </select>
+        <select id="stShift">
+          <option>Mañana (07 a 15 hs)</option>
+          <option>Tarde (15 a 23 hs)</option>
+          <option>Noche (23 a 07 hs)</option>
+        </select>
+        <button class="btn" onclick="addStaff()">+ Agregar Staff</button>
+      </div>
+    `)}
+
+    ${panel('Equipo de Trabajo Hotelero', table(
+      ['Nombre', 'Puesto / Rol', 'Turno Asignado', 'Acción'],
+      state.staff.map(st => row(
+        `<b>${st.name}</b>`,
+        st.role,
+        st.shift,
+        `<button class="btn danger sm" onclick="removeStaff(${st.id})">Quitar</button>`
+      ))
+    ))}
+  `;
+}
+
+function addStaff() {
+  const name = $('stName').value.trim();
+  if (!name) return toast('Ingrese el nombre del empleado');
+
+  state.staff.push({
+    id: Date.now(),
+    name,
+    role: $('stRole').value,
+    shift: $('stShift').value
+  });
+
+  save();
+  render();
+  toast('Personal registrado');
+}
+
+function removeStaff(id) {
+  state.staff = state.staff.filter(s => s.id !== id);
+  save();
+  render();
+}
+
+// 9. CAJA Y GASTOS
+function caja() {
+  const totalIncomes = state.sales.reduce((a, b) => a + b.total, 0);
+  const totalExpenses = state.expenses.reduce((a, b) => a + b.amount, 0);
+  const balance = totalIncomes - totalExpenses;
+
+  return `
+    <div class="cards" style="grid-template-columns:repeat(3,1fr)">
+      <div class="card"><div class="muted">Ingresos Totales</div><div class="num" style="color:var(--green)">${money(totalIncomes)}</div></div>
+      <div class="card"><div class="muted">Gastos / Operación</div><div class="num" style="color:var(--red)">${money(totalExpenses)}</div></div>
+      <div class="card"><div class="muted">Balance Neto</div><div class="num">${money(balance)}</div></div>
+    </div>
+
+    ${panel('Registrar Egreso / Gasto Directo', `
+      <div class="formrow">
+        <input id="expConcept" placeholder="Concepto (ej: Pago Servicio de Internet)">
+        <input id="expAmount" type="number" placeholder="Monto ARS">
+        <button class="btn" onclick="addExpense()">Registrar Gasto</button>
+      </div>
+    `)}
+
+    <div class="grid2">
+      ${panel('Ingresos de Caja (Alojamiento y Servicios)', table(
+        ['Fecha', 'Concepto', 'Medio de Pago', 'Monto'],
+        state.sales.map(s => row(s.date, s.concept, s.method, money(s.total)))
+      ))}
+
+      ${panel('Egresos Registrados', table(
+        ['Fecha', 'Concepto', 'Monto'],
+        state.expenses.map(e => row(e.date, e.concept, money(e.amount)))
+      ))}
+    </div>
+  `;
+}
+
+function addExpense() {
+  const concept = $('expConcept').value.trim();
+  const amount = +$('expAmount').value;
+
+  if (!concept || amount <= 0) return toast('Complete concepto y monto válido');
+
+  state.expenses.push({
+    id: uid(),
+    concept,
+    amount,
+    date: today()
+  });
+
+  save();
+  render();
+  toast('Gasto guardado');
+}
+
+// 10. REPORTES
+function reportes() {
+  const byMethod = {};
+  state.sales.forEach(s => byMethod[s.method] = (byMethod[s.method] || 0) + s.total);
+
+  return `
+    <div class="grid2">
+      ${panel('Distribución de Ingresos por Medio de Pago', Object.entries(byMethod).map(([k, v]) => `
+        <div class="statline">
+          <span>${k}</span>
+          <b>${money(v)}</b>
+        </div>
+      `).join('') || '<div class="empty">Sin datos registrados</div>')}
+
+      ${panel('Métricas de Operación y Estadísticas', `
+        <div class="statline"><span>Cantidad total de Habitaciones</span><b>${state.rooms.length}</b></div>
+        <div class="statline"><span>Personal registrado</span><b>${state.staff.length}</b></div>
+        <div class="statline"><span>Servicios de Minibar/Spa disponibles</span><b>${state.services.length}</b></div>
+        <div class="statline"><span>Reservas totales registradas</span><b>${state.reservations.length}</b></div>
+      `)}
+    </div>
+
+    ${panel('Resumen del Tarifario de Habitaciones', table(
+      ['Categoría', 'Precio Noche', 'Capacidad Máx'],
+      state.categories.map(c => row(c.name, money(c.price), `${c.capacity} Personas`))
+    ))}
+  `;
+}
+
+// 11. CONFIGURACION
+function configuracion() {
+  return panel('Configuración de la Demo (HABITA PRO)', `
+    <p style="line-height:1.6">Esta aplicación web funciona en modo Single Page Application (SPA) ejecutándose 100% en el navegador. La información persistente está almacenada mediante <b>localStorage</b> de su dispositivo.</p>
+    <div class="actions" style="margin-top:20px">
+      <button class="btn secondary" onclick="exportData()">Exportar Datos (JSON)</button>
+      <button class="btn danger" onclick="resetDemo()">Restablecer Datos Semilla</button>
+    </div>
+    <p class="muted" style="margin-top:20px;font-size:12px">Para una implementación en producción se integra backend REST/GraphQL, autenticación por roles, integración con POS/PMS y pasarelas de pago reales.</p>
+  `);
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'habitapro-demo-datos.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function resetDemo() {
+  if (!confirm('¿Restablecer toda la demo a los datos iniciales?')) return;
+  state = structuredClone(initial);
+  save();
+  render();
+  toast('Datos restablecidos a la semilla inicial');
+}
+
+// Iniciar app
+render();
+</script>
+</body>
+</html>
